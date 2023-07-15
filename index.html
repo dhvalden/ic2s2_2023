@@ -1,0 +1,369 @@
+<!doctype html>
+
+<!-- Preamble -->
+
+<html lang="en">
+    <head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>IC2S2 2023 Daniel Valdenegro</title>
+
+	<link rel="stylesheet" href="dist/reset.css">
+	<link rel="stylesheet" href="dist/reveal.css">
+	<link rel="stylesheet" href="dist/theme/white.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<!-- <link rel="stylesheet" href="plugin/highlight/solarized-dark.css"> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/arta.min.css">
+    </head>
+    <body>
+	<div class="reveal">
+	    <div class="slides">
+
+		<!-- Slides start here -->
+
+		<!-- Title Slide -->
+		<section>
+		    <h2>NRobust IC2S2</h2>
+		    <p>
+			<b>
+			    Charles Rahal<sup>1, 2</sup><br>
+			    Daniel Valdenegro<sup>1, 2</sup><br>
+			</b>
+		    </p>
+		    <small>
+			<p>
+			    <sup>1</sup>Leverhulme Centre for Demographic Science, University of Oxford<br>
+			    <sup>2</sup>Centre for Care, University of Oxford<br>
+			</p>
+		    </small>
+		</section>
+		
+		<!-- Nrobust Section  -->
+		
+		<section>
+		    <section>
+			<h3><b><em>NRobust:</em></b></h3>
+			A Python library for multiversal analysis.
+		    </section>
+		    <section data-auto-animate>
+			<h3>The issue</h3>
+		    </section>
+		    <section data-auto-animate>
+			<h3>The issue</h3>
+			<ul>
+			    <span style="font-size:0.7em">
+				<li>There has recently been an increasing amount of attention paid to the levels of
+				    uncertainty around estimates produced in the academic social sciences,
+				    with the issue of researcher-induced uncertainty addressed in several high-profile papers.</li>
+			    </span>
+			</ul>
+			<span style="font-size:0.7em" class="fragment fade-in-then-semi-out">
+			    <img src="./imgs/many_researchers.png"
+				 style="height: 200px; margin: 1 auto 4rem auto; background: transparent;">
+			</span>
+			<span style="font-size:0.7em" class="fragment fade-in-then-semi-out">
+			    <img src="./imgs/evaluating_nhb.png"
+				 style="height: 200px; margin: 1 auto 4rem auto; background: transparent;">
+			</span>
+		    </section>
+		    <section data-auto-animate>
+			<h3>The issue</h3>
+			<ul>
+			    <span style="font-size:0.7em">
+				<li>A key issue in researcher-induced uncertainty is the sensitivity of the estimates
+				    to different model specifications. These model specifications usually include all
+				    possible combinations of 'control' variables, along with other analytical choices.</li>
+			    </span>
+			</ul>
+		    </section>
+		    <section data-auto-animate>
+			<h3>The issue</h3>
+			<ul>
+			    <span style="font-size:0.7em">
+				<li>This has come to be known as 'multiverse analysis' when examining multiple types of
+				    'researcher degrees of freedom'; or 'specification-curve analysis'
+				    when exclusively considering specification choices.</li>
+			    </span>
+			</ul>
+			<span style="font-size:0.7em" class="fragment fade-in-then-semi-out">
+			    <img src="./imgs/spec_analysis.png"
+				 style="height: 300px; margin: 1 auto 4rem auto; background: transparent;">
+			</span>
+		    </section>
+		    <section data-auto-animate>
+			<h3>The issue</h3>
+			<ul>
+			    <span style="font-size:0.7em">
+				<li>Currently, researches conducting specification-curve analysis generally opt to use their own homebrew subroutines.</li>
+				<li>The varying quality and stability of such routines usually affects
+				    replication efforts, undermining their robustness.</li>
+			    </span>
+			</ul>
+		    </section>
+		    <section data-auto-animate data-auto-animate-restart>
+			<h3>Our proposal</h3>
+		    </section>
+		    <section data-auto-animate>
+			<h3>Our proposal</h3>
+			<p style="font-size:0.7em">
+			    Giving a standar multiple linear regresion model:
+			</p>
+			<p style="font-size:0.7em">
+			    $$
+			    Y_i = \alpha_0 + \beta_1X_{i,1} + \sum_{k=2}^{K}\beta_kX_{i,k}
+			    +\sum_{j=1}^{J}\lambda_{j}c_{i,j} + \epsilon_i 
+			    $$
+			</p>
+			<p style="font-size:0.7em">
+			    For each observation $i = 1, \dots, N$ with
+			    $\{x_{i,1}, \dots x_{i,K}\} \in X$
+			    being a fixed set of predictors, our approach allows us to:
+			</p>
+		    </section>
+		    <section data-auto-animate>
+			<h3>Our proposal</h3>
+			<p style="font-size:0.7em">
+			    $$
+			    Y_i = \alpha_0 + \textcolor{red}{\beta_1X_{i,1}} + \sum_{k=2}^{K}\beta_kX_{i,k}
+			    +\sum_{j=1}^{J}\lambda_{j}c_{i,j} + \epsilon_i 
+			    $$
+			</p>
+			<ul>
+			    <li style="font-size:0.5em">
+				Isolate the variation in a 'feasible' output space pertaining
+				to a specific coefficient of interest ($\beta_1$).
+			    </li>
+			</ul>
+		    </section>
+		    <section data-auto-animate>
+			<h3>Our proposal</h3>
+			<p style="font-size:0.7em">
+			    $$
+			    Y_i = \alpha_0 + \beta_1X_{i,1} + \textcolor{red}{\sum_{k=2}^{K}\beta_kX_{i,k}}
+			    +\sum_{j=1}^{J}\lambda_{j}c_{i,j} + \epsilon_i
+			    $$
+			</p>
+			<ul>
+			    <li style="font-size:0.5em">
+				Isolate the variation in a 'feasible' output space pertaining
+				to a specific coefficient of interest ($\beta_1$).
+			    </li>
+			    <li style="font-size:0.5em">
+				Include a set of variables $\{x_{i, 2} \dots x_{i,K}$)
+				variables which should always be included in the model space.
+			    </li>
+			</ul>
+		    </section>
+		    <section data-auto-animate>
+			<h3>Our proposal</h3>
+			<p style="font-size:0.7em">
+			    $$
+			    Y_i = \alpha_0 + \beta_1X_{i,1} + \sum_{k=2}^{K}\beta_kX_{i,k}
+			    + \textcolor{red}{\sum_{j=1}^{J}\lambda_{j}c_{i,j}} + \epsilon_i
+			    $$
+			</p>
+			<ul>
+			    <li style="font-size:0.5em">
+				Isolate the variation in a 'feasible' output space pertaining
+				to a specific coefficient of interest ($\beta_1$).
+			    </li>
+			    <li style="font-size:0.5em">
+				Include a set of variables $\{x_{i, 2} \dots x_{i,K}$)
+				variables which should always be included in the model space.
+			    </li>
+			    <li style="font-size:0.5em">
+				Estimate the model with all possible combinations of subsets of control variables
+				$\{c_1, \dots, c_J\}$ of any length up to $J$.
+			    </li>
+			</ul>
+		    </section>
+		    <section data-auto-animate>
+			<h3>Our proposal</h3>
+			<p style="font-size:0.7em">
+			    $$
+			    \textcolor{red}{Y_i} = \alpha_0 + \beta_1X_{i,1} + \sum_{k=2}^{K}\beta_kX_{i,k}
+			    + \sum_{j=1}^{J}\lambda_{j}c_{i,j} + \epsilon_i
+			    $$
+			</p>
+			<ul>
+			    <li style="font-size:0.5em">
+				Isolate the variation in a 'feasible' output space pertaining
+				to a specific coefficient of interest ($\beta_1$).
+			    </li>
+			    <li style="font-size:0.5em">
+				Include a set of variables $\{x_{i, 2} \dots x_{i,K}$)
+				variables which should always be included in the model space.
+			    </li>
+			    <li style="font-size:0.5em">
+				Estimate the model with all possible combinations of subsets of control variables
+				$\{c_1, \dots, c_J\}$ of any length up to $J$.
+			    </li>
+			    <li style="font-size:0.5em">
+				Compute the model with the arithmetic mean of all possible combinations of
+				$\{y_1, \dots, y_{M}\}$ as the dependent variable.
+			    </li>
+			</ul>
+		    </section>
+		    <section data-auto-animate>
+			<h3>Our proposal</h3>
+			<p style="font-size:0.7em">
+			    $$
+			    Y_i = \alpha_0 + \beta_1X_{i,1} + \sum_{k=2}^{K}\beta_kX_{i,k}
+			    + \sum_{j=1}^{J}\lambda_{j}c_{i,j} + \epsilon_i
+			    $$
+			</p>
+			<ul>
+			    <li style="font-size:0.5em">
+				Isolate the variation in a 'feasible' output space pertaining
+				to a specific coefficient of interest ($\beta_1$).
+			    </li>
+			    <li style="font-size:0.5em">
+				Include a set of variables $\{x_{i, 2} \dots x_{i,K}$)
+				variables which should always be included in the model space.
+			    </li>
+			    <li style="font-size:0.5em">
+				Estimate the model with all possible combinations of subsets of control variables
+				$\{c_1, \dots, c_J\}$ of any length up to $J$.
+			    </li>
+			    <li style="font-size:0.5em">
+				Compute the model with the arithmetic mean of all possible combinations of
+				$\{y_1, \dots, y_{M}\}$ as the dependent variable.
+			    </li>
+			    <li style="font-size:0.5em">
+				Select a posteriori models or weight combinations of well-specified
+				models for reliable inference.
+			    </li>
+			</ul>
+		    </section>
+		    <section data-auto-animate data-auto-animate-restart>
+			<h3>Current Features</h3>
+		    </section>
+		    <section data-auto-animate>
+			<h3>Current Features</h3>
+			<ul>
+			    <li style="font-size:0.7em">
+				OLS and Fixed Effects calculations.
+			    </li>
+			    <li style="font-size:0.7em">
+				Bayesian Model Average Score for each covariate.
+			    </li>
+			    <li style="font-size:0.7em">
+				Optional out-of-sample predictive score for each specification.
+			    </li>
+			    <li style="font-size:0.7em">
+				On demand highlight of selected specifications.
+			    </li>
+			    <li style="font-size:0.7em">
+				3 information criteria curves and its corresponding values for each spec: AIC, BIC, HQIC.
+			    </li>
+			    <li style="font-size:0.7em">
+				Bootstrapped confidence intervals with density plots for highlighted specs.
+			    </li>
+			    <li style="font-size:0.7em">
+				On demand hisghlight of selected covariates.
+			    </li>
+			</ul>
+		    </section>
+		    <section data-auto-animate data-auto-animate-restart>
+			<h3>How does it look like?</h3>
+		    </section>
+		    <section data-auto-animate>
+			<h3>How does it look like?</h3>
+			<p style="font-size:0.7em">
+			    The user-facing code looks like this:
+			</p>
+			<p>
+			    <pre data-id="code-animation">
+				<code class="hljs python" data-trim data-line-numbers style="font-size:0.7em">
+                                    from nrobust.models import OLSRobust
+                                    import pandas as pd
+                                    import numpy as np
+                                    import matplotlib.pyplot as
+                                    df = pd.read_csv('Guber1999data.csv')
+                                    x = ["Spend"]
+                                    c = ["StuTeaRat", "Salary", "PrcntTake"]
+                                    y = ["SATT"]
+                                    example = OLSRobust(y=y, x=x, data=df)
+                                    example.fit(controls=c, draws=500, replace=True)
+                                    results = example.get_results()
+                                    fig, ax1, ax2, ax3 = results.plot(specs=[["PrcntTake", "Salary"]], ic='bic')
+                                    plt.show()
+				</code>
+			    </pre>
+			</p>
+		    </section>
+		    <section data-auto-animate>
+			<h3>How does it look like?</h3>
+			<span style="font-size:0.7em" class="fragment fade-in-then-semi-out">
+			    <img src="./imgs/fig1.png"
+				 style="height: 400px; margin: 1 auto 4rem auto; background: transparent;">
+			</span>
+		    </section>
+		    <section data-auto-animate>
+			<h3>How does it look like?</h3>
+			<span style="font-size:0.7em" class="fragment fade-in-then-semi-out">
+			    <img src="./imgs/union_curve.png"
+				 style="height: 400px; margin: 1 auto 4rem auto; background: transparent;">
+			</span>
+		    </section>
+		    <section data-auto-animate>
+			<h3>How does it look like?</h3>
+			<span style="font-size:0.7em" class="fragment fade-in-then-semi-out">
+			    <img src="./imgs/example_1.png"
+				 style="height: 400px; margin: 1 auto 4rem auto; background: transparent;">
+			</span>
+		    </section>
+		    <section data-auto-animate>
+			<h3>How does it look like?</h3>
+			<span style="font-size:0.7em" class="fragment fade-in-then-semi-out">
+			    <img src="./imgs/example_2.png"
+				 style="height: 400px; margin: 1 auto 4rem auto; background: transparent;">
+			</span>
+		    </section>
+		    <section data-auto-animate data-auto-animate-restart>
+			<h3>Future Challenges</h3>
+		    </section>
+		    <section data-auto-animate data-auto-animate-restart>
+			<h3>Future Challenges</h3>
+			<ul>
+			    <li style="font-size:0.7em">
+				Specification space size grows by $2^n$, where $n$ is the number of covariates. Models with 10 covariates produce 1,024 specifications. Models with 20 covariates produce 1,048,576. Models with 30 covariates produce 1,073,741,824 specificatios.
+			    </li>
+			    <li style="font-size:0.7em">
+				Random sampling over the specification space?
+			    </li>
+			    <li style="font-size:0.7em">
+				GPU parallelisation?
+			    </li>
+			</ul>
+		    </section>
+		    <section data-auto-animate data-auto-animate-restart>
+			<h3>Thank you!</h3>
+			
+		    </section>
+		</section>
+            </div>
+        </div>
+
+        <script src="dist/reveal.js"></script>
+        <script src="plugin/notes/notes.js"></script>
+        <script src="plugin/markdown/markdown.js"></script>
+        <script src="plugin/highlight/highlight.js"></script>
+        <script src="plugin/math/math.js"></script>
+	<script src="plugin/zoom/zoom.js"></script>
+        <script>
+         // More info about initialization & config:
+         // - https://revealjs.com/initialization/
+         // - https://revealjs.com/config/
+         Reveal.initialize({
+             hash: true,
+
+             // Learn about plugins: https://revealjs.com/plugins/
+             plugins: [ RevealZoom, RevealMarkdown, RevealHighlight, RevealNotes, RevealMath.KaTeX ]
+         });
+        </script>
+    </body>
+</html>
